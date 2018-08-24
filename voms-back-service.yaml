@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: voms-backend
+  name: voms-backend
+  namespace: voms
+spec:
+  selector:
+    app: voms-backend
+  ports:
+  - protocol: TCP
+    port: 3306

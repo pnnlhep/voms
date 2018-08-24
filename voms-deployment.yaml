@@ -1,0 +1,74 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: voms-frontend
+  name: voms-frontend
+  namespace: voms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voms-frontend
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: voms-frontend
+      name: voms-frontend
+    spec:
+      hostname: 'voms'
+      containers:
+      - name: voms-frontend
+        image: pnnlhep/voms-server-front:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voms-secrets
+              key: mysql-root-password
+        volumeMounts:
+         - name: startscript
+           mountPath: "/etc/start.sh"
+           subPath: start.sh
+         - name: voms-certs
+           mountPath: "/etc/grid-security/hostcert.pem"
+           subPath: hostcert.pem
+           readOnly: true
+         - name: voms-certs
+           mountPath: "/etc/grid-security/hostkey.pem"
+           subPath: hostkey.pem
+           readOnly: true
+        command: ["/etc/start.sh"]
+        #args: ["/etc/start.sh; /etc/do-nothing.sh"]
+          #- /etc/start.sh
+          #- /etc/do-nothing.sh
+      volumes:
+        - name: voms-certs
+          secret:
+            secretName: voms-secrets
+            items:
+              - key: voms-hostcert
+                path: hostcert.pem
+                mode: 420
+              - key: voms-hostkey
+                path: hostkey.pem
+                mode: 256
+        - name: mysql-root-passsword
+          secret:
+            secretName: voms-secrets
+        - name: startscript
+          configMap:
+            name: voms-frontend
+            items:
+              - key: startscript
+                path: start.sh
+                mode: 493
+#      readinessProbe:
+#          tcpSocket:
+#            port: 8443
+#          initialDelaySeconds: 30
