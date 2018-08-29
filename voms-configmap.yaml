@@ -21,12 +21,27 @@ data:
     --dbname=voms_project8 \
     --dbusername=root \
     --dbpassword=$MYSQL_ROOT_PASSWORD \
-    --createdb \
     --dbhost=$VOMS_BACKEND_SERVICE_HOST \
     --dbport=3306 \
     --dbauser=root \
     --dbapwd=$MYSQL_ROOT_PASSWORD \
     --core-port=15030 \
+    --smtp-host=emailgw02.pnnl.gov \
+    --mail-from='david.cowley@pnnl.gov'
+
+    voms-configure install \
+    --vo=ccsdi \
+    --hostname=voms.hep.pnnl.gov \
+    --skip-database \
+    --dbtype=mysql \
+    --dbname=voms_ccsdi \
+    --dbusername=root \
+    --dbpassword=$MYSQL_ROOT_PASSWORD \
+    --dbhost=$VOMS_BACKEND_SERVICE_HOST \
+    --dbport=3306 \
+    --dbauser=root \
+    --dbapwd=$MYSQL_ROOT_PASSWORD \
+    --core-port=15020 \
     --smtp-host=emailgw02.pnnl.gov \
     --mail-from='david.cowley@pnnl.gov'
 

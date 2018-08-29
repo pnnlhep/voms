@@ -25,3 +25,6 @@ $ kubectl create -f ./voms-configmap.yaml
 $ kubectl create -f ./voms-deployment.yaml
 $ kubectl create -f ./voms-front-service.yaml
 ```
+
+
+NOTE:  For some reason in the finished front end container, I've had to edit the file `/etc/voms/<vo>/voms.conf` to fix up the `--uri=voms.hep.pnnl.gov:<port>` entry to have the complete FQDN.
