@@ -1,0 +1,52 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  labels:
+    app: voms-backend-dump
+  name: mysql-voms-dumper
+  namespace: voms
+spec:
+  concurrencyPolicy: Forbid
+  schedule: "10 1 * * *"
+  jobTemplate:
+    metadata:
+      labels:
+        app: voms-backend-dump
+      name: mysql-voms-dumper
+    spec:
+      template:
+        spec:
+          nodeSelector:
+            constance-lustre: v1
+          restartPolicy: OnFailure
+          containers:
+          - name: voms-dumper
+            image: mysql:5.7
+            command:
+              - /bin/bash
+            args:
+              - -c
+              - |
+                /usr/bin/mysqldump -u root --password=$MYSQL_ROOT_PASSWORD -h \
+                $VOMS_BACKEND_SERVICE_HOST -P \
+                $VOMS_BACKEND_SERVICE_PORT --all-databases \
+                > /pic/projects/project8/voms/vomsdb_`date +%m-%d`.sql
+            env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql-root-password
+                  name: voms-secrets
+            - name: MYSQL_DATABASE
+              value: project8
+            volumeMounts:
+            - name: dump-volume
+              mountPath: /pic
+          volumes:
+          - name: dump-volume
+            hostPath:
+              path: /pic-dtemp
+              type: Directory
+          - name: mysql-root-passsword
+            secret:
+              secretName: voms-secrets
