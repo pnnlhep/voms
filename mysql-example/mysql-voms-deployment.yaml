@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: voms-backend
+  name: voms-project8-db
+  namespace: voms
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: voms-backend
+      name: voms-project8-db
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: p1.hep.pnnl.gov
+      containers:
+      - name: voms-project8-db
+        image: mysql:5.7
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: mysql-root-password
+              name: voms-secrets
+        - name: MYSQL_DATABASE
+          value: project8
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+        ports:
+        - name: mysql
+          containerPort: 3306
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: voms-project8-db
+      - name: mysql-root-passsword
+        secret:
+          secretName: voms-secrets

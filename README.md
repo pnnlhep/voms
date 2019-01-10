@@ -8,7 +8,21 @@ A way to create a database for a new VO is to create a new MySQL backend contain
 
 The `voms-configure` script that is in the configmap is careful to set up the VOMS server config while *not* disturbing the existing data in the MySQL database.  This theoretically allows redeployment and maybe multiple front-end instances, but that has *not* been tested.
 
-The mysql root password and other needed things like certificates are provided in the voms-secrets.yaml file.
+The mysql root password and other needed things like certificates are provided in the voms-secrets.yaml file.  Example:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: voms-secrets
+  namespace: voms
+type: Opaque
+data:
+voms-hostkey: <base64-ized host key>
+voms-hostcert: <base64-ized host certificate>
+mysql-root-password: <base64-ized password string>
+
+```
 
 Certificates can be serialized for inclusions in a secrets file like:
 ```cat hostcert.pem | base64```
