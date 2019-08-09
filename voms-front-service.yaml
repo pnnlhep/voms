@@ -16,9 +16,9 @@ spec:
   - port: 15030
     targetPort: 15030
     name: vo1
-  - port: 15020
-    targetPort: 15020
-    name: vo2
+#  - port: 15020
+#    targetPort: 15020
+#    name: vo2
 #  - port: 15030
 #    targetPort: 15030
 #    name: vo3

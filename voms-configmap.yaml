@@ -30,22 +30,6 @@ data:
     --smtp-host=emailgw02.pnnl.gov \
     --mail-from='david.cowley@pnnl.gov'
 
-    voms-configure install \
-    --vo=ccsdi \
-    --hostname=voms.hep.pnnl.gov \
-    --skip-database \
-    --dbtype=mysql \
-    --dbname=voms_ccsdi \
-    --dbusername=root \
-    --dbpassword=$MYSQL_ROOT_PASSWORD \
-    --dbhost=$VOMS_BACKEND_SERVICE_HOST \
-    --dbport=3306 \
-    --dbauser=root \
-    --dbapwd=$MYSQL_ROOT_PASSWORD \
-    --core-port=15020 \
-    --smtp-host=emailgw02.pnnl.gov \
-    --mail-from='david.cowley@pnnl.gov'
-
     /sbin/service postfix start
     /sbin/service voms-admin start
     /sbin/service voms start
