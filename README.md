@@ -42,4 +42,7 @@ $ kubectl create -f ./voms-front-service.yaml
 ```
 
 
-NOTE:  For some reason in the finished front end container, I've had to edit the file `/etc/voms/<vo>/voms.conf` to fix up the `--uri=voms.hep.pnnl.gov:<port>` entry to have the complete FQDN.
+NOTES:  
+  * For some reason in the finished front end container, I've had to edit the file `/etc/voms/<vo>/voms.conf` to fix up the `--uri=voms.hep.pnnl.gov:<port>` entry to have the complete FQDN.  This was hacked around in `start.sh` from `voms-configmap.yaml` file.
+  * Use of the `--skip-voms-admin` flag on `voms-configure` on deployment has been used to "hide" (and unhide) a VO (e.g. ccsdi) without getting rid of it.
+
