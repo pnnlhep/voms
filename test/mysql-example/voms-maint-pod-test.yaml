@@ -2,14 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: voms-frontend
-  name: voms-frontend
+    app: voms-maint-test
+  name: voms-maint-pod-test
   namespace: voms
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
-      app: voms-frontend
+      app: voms-maint-test
   strategy:
     rollingUpdate:
       maxSurge: 0
@@ -18,12 +18,14 @@ spec:
   template:
     metadata:
       labels:
-        app: voms-frontend
-      name: voms-frontend
+        app: voms-maint-test
+      name: voms-maint-test
     spec:
-      hostname: 'voms'
+      hostname: 'voms-maint'
+      nodeSelector:
+        constance-lustre: v1
       containers:
-      - name: voms-frontend
+      - name: voms-maint-test
         image: pnnlhep/voms-server-front:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
@@ -31,49 +33,43 @@ spec:
             secretKeyRef:
               name: voms-secrets
               key: mysql-root-password
-        command:
-          - /etc/start.sh
         volumeMounts:
+         - name: dump-volume
+           mountPath: /pic
          - name: startscript
            mountPath: "/etc/start.sh"
            subPath: start.sh
          - name: voms-certs
-           mountPath: /etc/grid-security/hostcert.pem
+           mountPath: "/etc/grid-security/hostcert.pem"
            subPath: hostcert.pem
            readOnly: true
-         - name: certs
-           mountPath: /etc/grid-security/certificates
          - name: voms-certs
-           mountPath: /etc/grid-security/hostkey.pem
+           mountPath: "/etc/grid-security/hostkey.pem"
            subPath: hostkey.pem
            readOnly: true
+        command: ["/etc/do-nothing.sh"]
       volumes:
-        - name: certs
+        - name: dump-volume
           hostPath:
-            path: /export-fetchcrl-el7
-            type: ""
+            path: /pic-dtemp
+            type: Directory
         - name: voms-certs
           secret:
-            secretName: voms-frontend-test-cert
-            defaultMode: 420
+            secretName: voms-secrets
             items:
-            - key: tls.crt
-              mode: 420
-              path: hostcert.pem
-            - key: tls.key
-              mode: 256
-              path: hostkey.pem
-        - name: mysql-root-passsword
+              - key: voms-hostcert
+                path: hostcert.pem
+                mode: 420
+              - key: voms-hostkey
+                path: hostkey.pem
+                mode: 256
+        - name: mysql-root-password
           secret:
             secretName: voms-secrets
         - name: startscript
           configMap:
-            name: voms-frontend
+            name: voms-frontend-test
             items:
               - key: startscript
                 path: start.sh
                 mode: 493
-#      readinessProbe:
-#          tcpSocket:
-#            port: 8443
-#          initialDelaySeconds: 30

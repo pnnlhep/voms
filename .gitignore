@@ -1,0 +1,5 @@
+debris
+debris/*
+*.sql
+dbimport.sh
+voms-cert-secret*.yaml

@@ -2,19 +2,19 @@ kind: Service
 apiVersion: v1
 metadata:
   labels:
-    app: voms-frontend
-  name: voms-frontend
+    app: voms-frontend-test
+  name: voms-frontend-test
   namespace: voms
 spec:
-  externalName: voms.hep.pnnl.gov
+  externalName: voms-test.hep.pnnl.gov
   externalIPs:
-  - 192.101.107.214
+  - 192.101.107.248
   ports:
   - port: 8443
     targetPort: 8443
     name: voms
-  - port: 15030
-    targetPort: 15030
+  - port: 15010
+    targetPort: 15010
     name: vo1
   - port: 15020
     targetPort: 15020
@@ -23,4 +23,5 @@ spec:
 #    targetPort: 15030
 #    name: vo3
   selector:
-    app: voms-frontend
+    app: voms-frontend-test
+#  clusterIP: 192.101.107.214

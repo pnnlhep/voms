@@ -2,14 +2,14 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   labels:
-    app: voms-frontend
-  name: voms-frontend
+    app: voms-frontend-test
+  name: voms-frontend-test
   namespace: voms
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: voms-frontend
+      app: voms-frontend-test
   strategy:
     rollingUpdate:
       maxSurge: 0
@@ -18,12 +18,12 @@ spec:
   template:
     metadata:
       labels:
-        app: voms-frontend
-      name: voms-frontend
+        app: voms-frontend-test
+      name: voms-frontend-test
     spec:
-      hostname: 'voms'
+      hostname: 'voms-test'
       containers:
-      - name: voms-frontend
+      - name: voms-frontend-test
         image: pnnlhep/voms-server-front:latest
         env:
         - name: MYSQL_ROOT_PASSWORD
@@ -37,13 +37,13 @@ spec:
          - name: startscript
            mountPath: "/etc/start.sh"
            subPath: start.sh
-         - name: voms-certs
+         - name: voms-test-certs
            mountPath: /etc/grid-security/hostcert.pem
            subPath: hostcert.pem
            readOnly: true
          - name: certs
            mountPath: /etc/grid-security/certificates
-         - name: voms-certs
+         - name: voms-test-certs
            mountPath: /etc/grid-security/hostkey.pem
            subPath: hostkey.pem
            readOnly: true
@@ -52,7 +52,7 @@ spec:
           hostPath:
             path: /export-fetchcrl-el7
             type: ""
-        - name: voms-certs
+        - name: voms-test-certs
           secret:
             secretName: voms-frontend-test-cert
             defaultMode: 420
@@ -68,7 +68,7 @@ spec:
             secretName: voms-secrets
         - name: startscript
           configMap:
-            name: voms-frontend
+            name: voms-frontend-test
             items:
               - key: startscript
                 path: start.sh
