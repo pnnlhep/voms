@@ -10,8 +10,10 @@ data:
     # This seems like it shouldn't be necessary but can't find a better way
     sed -i 's/host=.*/host=voms.hep.pnnl.gov/' /etc/voms-admin/voms-admin-server.properties
 
+    echo  >> /etc/voms-admin/voms-admin-server.properties
     echo "#" >> /etc/voms-admin/voms-admin-server.properties
     echo "tls_exclude_cipher_suites=TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_RSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDH_ECDSA_WITH_3DES_EDE_CBC_SHA,TLS_ECDH_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_RSA_WITH_3DES_EDE_CBC_SHA,SSL_DHE_DSS_WITH_3DES_EDE_CBC_SHA,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_DSS_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256,TLS_DHE_DSS_WITH_AES_128_GCM_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256" >> /etc/voms-admin/voms-admin-server.properties
+    echo "tls_exclude_protocols=TLSv1,TLSv1.1" >> /etc/voms-admin/voms-admin-server.properties
 
     # This horrible hack fixes up quoting in the voms-db-util script so that
     # it won't gag on the apostrophe in the issuer name ("Let's Encrypt") in
@@ -61,5 +63,8 @@ data:
     while (true)
     do
         sleep 1800
-        /sbin/service voms reload
+        # Bad idea.  This falls down and can't get up when I do it.  the
+        # service doesn't come back, so no ports (15020, 15030) for clients
+        # to connect to.
+        # /sbin/service voms reload
     done
