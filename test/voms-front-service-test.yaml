@@ -19,9 +19,9 @@ spec:
   - port: 15020
     targetPort: 15020
     name: vo2
-#  - port: 15030
-#    targetPort: 15030
-#    name: vo3
+  - port: 15030
+    targetPort: 15030
+    name: vo3
   selector:
     app: voms-frontend-test
 #  clusterIP: 192.101.107.214

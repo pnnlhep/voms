@@ -36,25 +36,45 @@ data:
     --dbport=3306 \
     --dbauser=root \
     --dbapwd=$MYSQL_ROOT_PASSWORD \
-    --core-port=15010 \
+    --core-port=15030 \
     --smtp-host=emailgw02.pnnl.gov \
     --mail-from='david.cowley@pnnl.gov'
 
+    #voms-configure install \
+    #--vo=ccsdi \
+    #--hostname=voms-test.hep.pnnl.gov \
+    #--skip-database \
+    #--dbtype=mysql \
+    #--dbname=voms_ccsdi \
+    #--dbusername=root \
+    #--dbpassword=$MYSQL_ROOT_PASSWORD \
+    #--dbhost=$VOMS_BACKEND_SERVICE_HOST \
+    #--dbport=3306 \
+    #--dbauser=root \
+    #--dbapwd=$MYSQL_ROOT_PASSWORD \
+    #--core-port=15020 \
+    #--smtp-host=emailgw02.pnnl.gov \
+    #--mail-from='david.cowley@pnnl.gov'
+
     voms-configure install \
-    --vo=ccsdi \
-    --hostname=voms.hep.pnnl.gov \
+    --vo=msdlive \
+    --hostname=voms-test.hep.pnnl.gov \
     --skip-database \
     --dbtype=mysql \
-    --dbname=voms_ccsdi \
+    --dbname=voms_msdlive \
     --dbusername=root \
     --dbpassword=$MYSQL_ROOT_PASSWORD \
     --dbhost=$VOMS_BACKEND_SERVICE_HOST \
     --dbport=3306 \
     --dbauser=root \
     --dbapwd=$MYSQL_ROOT_PASSWORD \
-    --core-port=15020 \
+    --core-port=15010 \
     --smtp-host=emailgw02.pnnl.gov \
     --mail-from='david.cowley@pnnl.gov'
+
+    /sbin/service voms-admin deploy msdlive
+    /sbin/service voms-admin deploy project8
+
 
     #/sbin/service postfix start
     /sbin/service voms-admin start
@@ -63,6 +83,4 @@ data:
     while (true)
     do
         sleep 1800
-        # Bad idea. voms falls down and can't get back up when I do this:
-        #/sbin/service voms reload
     done

@@ -41,6 +41,22 @@ data:
     --mail-from='david.cowley@pnnl.gov'
 
     voms-configure install \
+    --vo=msdlive \
+    --hostname=voms.hep.pnnl.gov \
+    --skip-database \
+    --dbtype=mysql \
+    --dbname=voms_msdlive \
+    --dbusername=root \
+    --dbpassword=$MYSQL_ROOT_PASSWORD \
+    --dbhost=$VOMS_BACKEND_SERVICE_HOST \
+    --dbport=3306 \
+    --dbauser=root \
+    --dbapwd=$MYSQL_ROOT_PASSWORD \
+    --core-port=15010 \
+    --smtp-host=emailgw02.pnnl.gov \
+    --mail-from='david.cowley@pnnl.gov'
+
+    voms-configure install \
     --vo=ccsdi \
     --hostname=voms.hep.pnnl.gov \
     --skip-database \
@@ -56,15 +72,14 @@ data:
     --smtp-host=emailgw02.pnnl.gov \
     --mail-from='david.cowley@pnnl.gov'
 
-    #/sbin/service postfix start
+    /sbin/service voms-admin deploy msdlive
+    /sbin/service voms-admin deploy project8
+    /sbin/service voms-admin deploy ccsdi
+
     /sbin/service voms-admin start
     /sbin/service voms start
 
     while (true)
     do
         sleep 1800
-        # Bad idea.  This falls down and can't get up when I do it.  the
-        # service doesn't come back, so no ports (15020, 15030) for clients
-        # to connect to.
-        # /sbin/service voms reload
     done

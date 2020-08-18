@@ -4,6 +4,8 @@ DE Cowley 8/16/18:
 
 This collection of stuff implements a VOMS service (currently) supporting a single Virtual Organization.  It assumes a working MySQL database with valid VOMS data in it is available at `voms-backend` on port 3306.  
 
+Documentation for this version of VOMS is available at https://italiangrid.github.io/voms/documentation.html.  The `voms-configure` command will be of interest to create and administer VOs.
+
 A way to create a database for a new VO is to create a new MySQL backend container with persistent storage, then add and import an existing dump in the container.  The alternative is to make a new empty database and issue voms-configure commands from a VOMS server container manually.
 
 The `voms-configure` script that is in the configmap is careful to set up the VOMS server config while *not* disturbing the existing data in the MySQL database.  This theoretically allows redeployment and maybe multiple front-end instances, but that has *not* been tested.
